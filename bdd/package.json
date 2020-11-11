@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "ts-node -r dotenv/config ./node_modules/cucumber/bin/cucumber-js --format node_modules/cucumber-pretty --require \"features/**/*.ts\"",
-    "test:ci": "ts-node ./node_modules/cucumber/bin/cucumber-js --format node_modules/cucumber-pretty --require \"features/**/*.ts\"",
+    "test-ci": "ts-node ./node_modules/cucumber/bin/cucumber-js --format node_modules/cucumber-pretty --require \"features/**/*.ts\"",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix"
   },
