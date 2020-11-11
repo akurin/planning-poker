@@ -5,7 +5,7 @@ jobs:
     timeout-minutes: 3
     runs-on: ubuntu-latest
     container:
-      image: node
+      image: node:stretch
       options: --network-alias testhost
     defaults:
       run:
