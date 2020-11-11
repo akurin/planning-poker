@@ -1,4 +1,4 @@
-import { By, ThenableWebDriver, until } from "selenium-webdriver";
+import { By, ThenableWebDriver  } from "selenium-webdriver";
 
 export class StartGamePage {
   private _driver: ThenableWebDriver;
