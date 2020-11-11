@@ -20,11 +20,13 @@ jobs:
         working-directory: ui
         run: |
           npm install
+          npm run build
           npm start &
         env:
           CI: true
         
       - run: npm install
+      - run: npx wait-port -t 10000 localhost:5000
       - run: npm run test-ci
         env:
           CI: true
