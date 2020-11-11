@@ -20,5 +20,4 @@ export class StartGamePage {
     );
     await startGameButton.click();
   }
-
 }
