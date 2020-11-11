@@ -29,7 +29,7 @@ jobs:
           CI: true
           HOST: testhost
 
-      - run: npx wait-port -t 10000 localhost:5000
+      - run: npx wait-port -t 10000 testhost:5000
    
       - run: npm install
       - run: npm run test-ci
