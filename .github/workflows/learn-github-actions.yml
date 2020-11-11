@@ -27,7 +27,8 @@ jobs:
           npm start &
         env:
           CI: true
-      
+          HOST: testhost
+
       - run: npx wait-port -t 10000 localhost:5000
    
       - run: npm install
