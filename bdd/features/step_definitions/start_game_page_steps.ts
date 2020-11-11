@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { Then, When } from "cucumber";
 import { Given } from "cucumber";
-lo
+
 Given('I navigated to the "Start game" page', async function () {
   await this.navigation.navigateTo("http://localhost:5000");
 });
