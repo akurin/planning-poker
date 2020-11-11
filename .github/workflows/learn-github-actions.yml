@@ -4,6 +4,9 @@ jobs:
   bdd-tests:
     timeout-minutes: 3
     runs-on: ubuntu-latest
+    container:
+      image: node
+      options: --network-alias testhost
     defaults:
       run:
         working-directory: bdd
