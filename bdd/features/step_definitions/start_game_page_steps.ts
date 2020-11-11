@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { Then, When } from "cucumber";
 import { Given } from "cucumber";
-
+lo
 Given('I navigated to the "Start game" page', async function () {
-  await this.navigation.navigateTo("http://google.com");
+  await this.navigation.navigateTo("http://localhost:5000");
 });
 
 Given("I entered the game name {string}", async function (gameName: string) {
