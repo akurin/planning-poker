@@ -2,6 +2,7 @@ name: learn-github-actions-test
 on: [push]
 jobs:
   bdd-tests:
+    timeout-minutes: 3
     runs-on: ubuntu-latest
     defaults:
       run:
