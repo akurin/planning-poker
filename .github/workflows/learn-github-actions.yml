@@ -1,9 +1,8 @@
 name: learn-github-actions-test
 on: [push]
 jobs:
-  check-bats-version:
+  bdd-tests:
     runs-on: ubuntu-latest
-    container: 
     defaults:
       run:
         working-directory: bdd
@@ -15,6 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+      
+      - name: Run UI in background
+        working-directory: ui
+        run: |
+          npm install
+          npm start &
+        env:
+          CI: true
+        
       - run: npm install
       - run: npm run test-ci
         env:
