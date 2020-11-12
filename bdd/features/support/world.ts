@@ -1,5 +1,7 @@
 import { setWorldConstructor, World } from "cucumber";
-import { Builder, ThenableWebDriver } from "selenium-webdriver";
+import { Builder, ThenableWebDriver, WebDriver } from "selenium-webdriver";
+import chrome from "selenium-webdriver/chrome";
+import { Level, Preferences, Type } from "selenium-webdriver/lib/logging";
 
 import { GamePage } from "../step_definitions/pages/gamePage";
 import { Navigation } from "../step_definitions/pages/navigation";
@@ -25,9 +27,15 @@ class CustomWorld implements World {
   private createDriver() {
     const seleniumUrl = process.env.SELENIUM_URL;
 
-    const builder = new Builder().forBrowser("chrome");
+    const builder = new Builder()
+      .forBrowser("chrome")
+      .setChromeOptions(new chrome.Options().headless());
     if (seleniumUrl) builder.usingServer(seleniumUrl);
 
+    const p = new Preferences();
+    p.setLevel(Type.BROWSER, Level.ALL);
+    p.setLevel(Type.SERVER, Level.ALL);
+    builder.setLoggingPrefs(p);
     return builder.build();
   }
 
