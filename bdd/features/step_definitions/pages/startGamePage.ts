@@ -8,9 +8,6 @@ export class StartGamePage {
   }
 
   async setGameName(gameName: string): Promise<void> {
-    const body = await this._driver.findElement(By.name("body"));
-    const inner = body.getAttribute("innerHTML");
-    console.log(inner);
     const gameNameInput = await this._driver.findElement(
       By.css("[data-qa='game-name']")
     );
