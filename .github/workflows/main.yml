@@ -1,4 +1,4 @@
-name: learn-github-actions-test
+name: bdd-tests
 on: [push]
 jobs:
   bdd-tests:
