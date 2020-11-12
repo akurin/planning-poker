@@ -10,6 +10,7 @@ jobs:
       - uses: nanasess/setup-chromedriver@master
       - run: |
           whereis google-chrome
+          google-chrome -version
           google-chrome --headless --enable-logging=stderr --v=1
           ps aux
           cd ui
