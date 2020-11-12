@@ -25,12 +25,12 @@ class CustomWorld implements World {
   }
 
   private createDriver() {
-    const seleniumUrl = process.env.SELENIUM_URL;
-
     const builder = new Builder()
       .forBrowser("chrome")
       .setChromeOptions(new chrome.Options().headless());
-    if (seleniumUrl) builder.usingServer(seleniumUrl);
+
+    if (process.env.CI)
+      builder.setChromeOptions(new chrome.Options().headless());
 
     const p = new Preferences();
     p.setLevel(Type.BROWSER, Level.ALL);
