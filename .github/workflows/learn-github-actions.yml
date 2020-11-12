@@ -15,7 +15,7 @@ jobs:
           cd ../bdd
           npm install
           curl -v http://localhost:5000
-          curl -v http://testhost:5000/build/bundle.js
+          curl -v http://localhost:5000/build/bundle.js
           npm run test-ci
         env:
           CI: true
