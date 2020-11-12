@@ -1,5 +1,11 @@
 <script>
 	export let name;
+	let title = "no title";
+	let gameName = "";
+
+	function handleClick() {
+		title = gameName;
+	}
 </script>
 
 <style>
@@ -24,6 +30,10 @@
 	}
 </style>
 
+<svelte:head>
+	<title>{title}</title>
+</svelte:head>
+
 <main>
 	<h1>Hello {name}!</h1>
 	<p>
@@ -31,6 +41,10 @@
 		<a href="https://svelte.dev/tutorial">Svelte tutorial</a>
 		to learn how to build Svelte apps.
 	</p>
-	<input type="text" data-qa="game-name" />
-	<input type="button" data-qa="start-game" />
+	<input
+		id="gameName"
+		type="text"
+		data-qa="game-name"
+		bind:value={gameName} />
+	<input type="button" data-qa="start-game" on:click={handleClick} />
 </main>
