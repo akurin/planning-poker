@@ -19,3 +19,4 @@ jobs:
           npm run test-ci
         env:
           CI: true
+          HEADLESS_CHROME: true
