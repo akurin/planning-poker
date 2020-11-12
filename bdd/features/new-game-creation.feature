@@ -7,6 +7,6 @@ Feature: New game starting
     Given I navigated to the "Start game" page
 
   Scenario: Start a new game
-    Given I entered the game name "Spring planning"
+    Given I entered the game name "Sprint planning"
     When I start the game
-    Then I should be redirected to the game "Spring planning"
+    Then I should be redirected to the game "Sprint planning"
