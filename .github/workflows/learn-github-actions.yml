@@ -10,6 +10,7 @@ jobs:
       - uses: nanasess/setup-chromedriver@master
       - run: |
           whereis google-chrome
+          google-chrome --headless
           cd ui
           npm install
           npm run build
