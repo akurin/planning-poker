@@ -9,6 +9,7 @@ jobs:
       - uses: actions/setup-node@v1
       - uses: nanasess/setup-chromedriver@master
       - run: |
+          set -euo pipefail
           whereis google-chrome
           google-chrome -version
           google-chrome --headless --enable-logging=stderr --v=1
