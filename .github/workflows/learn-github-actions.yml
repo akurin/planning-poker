@@ -32,7 +32,7 @@ jobs:
       - run: npx wait-port -t 10000 testhost:5000
    
       - run: npm install
-#       - run: curl -v http://testhost:5000
+      - run: curl -v http://testhost:5000
       - run: curl -v http://testhost:5000/build/bundle.js
       - run: npm run test-ci
         env:
