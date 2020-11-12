@@ -4,35 +4,21 @@ jobs:
   bdd-tests:
     timeout-minutes: 3
     runs-on: ubuntu-latest
-    container:
-      image: node
-      options: --network-alias testhost
-    defaults:
-      run:
-        working-directory: bdd
-    services:
-      selenium:
-        image: selenium/standalone-chrome
-        ports:
-          - 4444:4444
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-      
-      - name: Run UI in background
-        working-directory: ui
-        run: |
+      - uses: actions/setup-node@v1      
+      - run: |
+          cd ui
           npm install
           npm run build
           npm start &
+          cd ../bdd
+          npm install
+          curl -v http://localhost:5000
+          curl -v http://localhost:5000/build/bundle.js
+          npm run test-ci
         env:
           CI: true
-          HOST: testhost
 
-      - run: npx wait-port -t 10000 testhost:5000
-   
-      - run: npm install
-      - run: npm run test-ci
-        env:
-          CI: true
-          SELENIUM_URL: http://selenium:4444/wd/hub/
+      - run: curl -v http://testhost:5000
+      - run: curl -v http://testhost:5000/build/bundle.js
