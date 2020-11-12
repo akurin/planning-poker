@@ -6,8 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1      
+      - uses: actions/setup-node@v1
+      - uses: nanasess/setup-chromedriver@master
       - run: |
+          set -euo pipefail
+          whereis google-chrome
+          google-chrome -version
+          google-chrome --headless --enable-logging=stderr --v=1
+          ps aux
           cd ui
           npm install
           npm run build
