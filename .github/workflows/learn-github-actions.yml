@@ -9,6 +9,7 @@ jobs:
       - uses: actions/setup-node@v1
       - uses: nanasess/setup-chromedriver@master
       - run: |
+          whereis google-chrome
           cd ui
           npm install
           npm run build
