@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
 
     onMount(async () => {
-        const res = await fetch(`http://localhost:5000/api/`, {
+        const res = await fetch(`http://localhost:8080/api/`, {
             method: "POST",
             body: JSON.stringify({
                 

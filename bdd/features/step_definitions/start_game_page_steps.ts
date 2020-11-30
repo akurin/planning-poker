@@ -3,7 +3,7 @@ import { Then, When } from "cucumber";
 import { Given } from "cucumber";
 
 Given('I navigated to the "Start game" page', async function () {
-  await this.navigation.navigateTo("http://localhost:5000");
+  await this.navigation.navigateTo("http://localhost:8080");
 });
 
 Given("I entered the game name {string}", async function (gameName: string) {
