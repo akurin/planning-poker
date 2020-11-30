@@ -51,5 +51,10 @@ module.exports = {
 			filename: '[name].css'
 		})
 	],
-	devtool: prod ? false: 'source-map'
+	devtool: prod ? false : 'source-map',
+	devServer: {
+		proxy: {
+		  '/api': 'http://localhost:5000'
+		}
+	  }
 };
