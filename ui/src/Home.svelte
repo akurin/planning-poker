@@ -1,22 +1,26 @@
 <script>
-    // import Link from "svelte-routing/src/Link.svelte";
-    import { onMount } from "svelte";
+    import { navigate } from "svelte-routing";
+
+    let title = "";
 
     async function handleClick() {
-        const res = await fetch(`http://localhost:8080/api/games`, {
+        const res = await fetch(`/api/games`, {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify({
-                title: "some",
+                title: title,
             }),
         });
 
         const responseBody = await res.json();
-        window.location.href = `http://localhost:8080/games/${responseBody.id}`;
+        navigate(`/games/${responseBody.id}`);
     }
 </script>
 
 <main>
     <p>New game</p>
-    <input type="text" data-qa="game-name" />
+    <input type="text" data-qa="game-name" bind:value={title} />
     <button on:click={handleClick}>New Game</button>
 </main>
