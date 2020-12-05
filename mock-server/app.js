@@ -16,8 +16,6 @@ const games = {};
 app.post("/api/games", async (req, res) => {
     await delay(3000)
 
-    console.log(req.body)
-
     const id = uuidv4();
     games[id] = {
         id: id,
