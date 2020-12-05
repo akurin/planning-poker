@@ -1,21 +1,22 @@
 <script>
-    import Link from "svelte-routing/src/Link.svelte";
+    // import Link from "svelte-routing/src/Link.svelte";
     import { onMount } from "svelte";
 
-    onMount(async () => {
-        const res = await fetch(`http://localhost:8080/api/`, {
+    async function handleClick() {
+        const res = await fetch(`http://localhost:8080/api/games`, {
             method: "POST",
             body: JSON.stringify({
-                
+                title: "some",
             }),
         });
-        const photos = await res.json();
-        console.log(photos);
-    });
+
+        const responseBody = await res.json();
+        window.location.href = `http://localhost:8080/games/${responseBody.id}`;
+    }
 </script>
 
 <main>
     <p>New game</p>
-    <Link to="games/123"><input type="button" data-qa="start-game" /></Link>
     <input type="text" data-qa="game-name" />
+    <button on:click={handleClick}>New Game</button>
 </main>

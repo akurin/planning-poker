@@ -1,4 +1,6 @@
 <script>
+import Home from "./Home.svelte";
+
 	export let name;
 	let title = "no title";
 	let gameName = "";
@@ -47,4 +49,6 @@
 		data-qa="game-name"
 		bind:value={gameName} />
 	<input type="button" data-qa="start-game" on:click={handleClick} />
+
+	<Home />
 </main>
