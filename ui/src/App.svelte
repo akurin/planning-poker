@@ -1,11 +1,9 @@
 <script>
-	export let name;
-	let title = "no title";
-	let gameName = "";
+	import { Router, Link, Route } from "svelte-routing";
+	import Game from "./Game.svelte";
+	import Home from "./Home.svelte";
 
-	function handleClick() {
-		title = gameName;
-	}
+	export let url = "";
 </script>
 
 <style>
@@ -30,21 +28,18 @@
 	}
 </style>
 
-<svelte:head>
+<!-- <svelte:head>
 	<title>{title}</title>
-</svelte:head>
+</svelte:head> -->
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>
-		Visit the
-		<a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-		to learn how to build Svelte apps.
-	</p>
-	<input
-		id="gameName"
-		type="text"
-		data-qa="game-name"
-		bind:value={gameName} />
-	<input type="button" data-qa="start-game" on:click={handleClick} />
+	<Router {url}>
+		<div>
+			<Route path="games/:id" let:params>
+				<Game id={params.id} />
+			</Route>
+
+			<Route path="/" component={Home} />
+		</div>
+	</Router>
 </main>
