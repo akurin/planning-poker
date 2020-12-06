@@ -1,22 +1,26 @@
 <script>
     import { onMount } from "svelte";
+    import App from "./App.svelte";
 
     export let id;
 
-    let title = "not loaded";
+    let game = null;
+    let pageTitle = game === null ? "Loading..." : game.title;
 
     onMount(async () => {
         const res = await fetch(`/api/games/${id}`);
-        const game = await res.json();
-        title = game.title;
+        game = await res.json();
+        pageTitle = game.title;
     });
 </script>
 
 <svelte:head>
-    <title>{title}</title>
+    <title>{pageTitle}</title>
 </svelte:head>
 
-<main>
+<main data-qa="game">
     <p>Game</p>
-    <p>{title}</p>
+    {#if game !== null}
+        <p data-qa="game-title">{game.title}</p>
+    {/if}
 </main>

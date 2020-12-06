@@ -17,6 +17,7 @@ When("I start the game", async function () {
 Then("I should be redirected to the game {string}", async function (
   expectedGameName: string
 ) {
+  await this.gamePage.waitUntilLoaded();
   const actualGameName = await this.gamePage.getGameName();
   expect(actualGameName).to.be.equal(expectedGameName);
 });
