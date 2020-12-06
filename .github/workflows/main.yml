@@ -18,7 +18,7 @@ jobs:
           echo starting mock server
           cd ../mock-server
           npm install
-          node app.js
+          node app.js &
           echo running tests
           cd ../bdd
           npm install
