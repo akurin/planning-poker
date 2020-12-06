@@ -8,13 +8,9 @@ export class GamePage {
   }
 
   async waitUntilLoaded(): Promise<void> {
+    await this._driver.wait(until.elementLocated(By.css('[data-qa="game"]')));
     await this._driver.wait(
-      until.elementLocated(By.css('[data-qa="game"]')),
-      10_000
-    );
-    await this._driver.wait(
-      until.elementLocated(By.css('[data-qa="game-title"]')),
-      10_000
+      until.elementLocated(By.css('[data-qa="game-title"]'))
     );
   }
 
