@@ -11,15 +11,15 @@ jobs:
       - uses: actions/setup-node@v1
       - name: Start UI and tests
         run: |
-          # start UI
+          echo starting UI
           cd ui
           npm install
           npm run dev &
-          # start mock server
+          echo starting mock server
           cd ../mock-server
           npm install
           node app.js
-          # run tests
+          echo running tests
           cd ../bdd
           npm install
           npx wait-port -t 10000 localhost:9000

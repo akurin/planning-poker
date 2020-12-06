@@ -14,7 +14,7 @@ export class GamePage {
     );
     await this._driver.wait(
       until.elementLocated(By.css('[data-qa="game-title"]')),
-      30_000
+      10_000
     );
   }
 
