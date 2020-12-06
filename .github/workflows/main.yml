@@ -15,7 +15,7 @@ jobs:
           npm start &
           cd ../bdd
           npm install
-          npx wait-port -t 10000 localhost:8080
+          npx wait-port -t 15000 localhost:8080
           npm run test-ci
         env:
           CI: true
