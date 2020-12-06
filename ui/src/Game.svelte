@@ -12,6 +12,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>{title}</title>
+</svelte:head>
+
 <main>
     <p>Game</p>
     <p>{title}</p>
