@@ -11,11 +11,10 @@ jobs:
         run: |
           cd ui
           npm install
-          npm run build
-          npm start &
+          npm run dev &
           cd ../bdd
           npm install
-          npx wait-port -t 15000 localhost:8080
+          npx wait-port -t 10000 localhost:9000
           npm run test-ci
         env:
           CI: true
