@@ -1,5 +1,5 @@
 <script>
-    import { navigate } from "svelte-routing";
+    import {navigate} from "svelte-routing";
 
     let title = "";
 
@@ -21,6 +21,6 @@
 
 <main>
     <p>New game</p>
-    <input type="text" data-qa="game-name" bind:value={title} />
-    <button on:click={handleClick} data-qa="start-game">New Game</button>
+    <input bind:value={title} data-qa="game-name" type="text"/>
+    <button data-qa="start-game" on:click={handleClick}>New Game</button>
 </main>

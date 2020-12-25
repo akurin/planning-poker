@@ -1,6 +1,5 @@
 <script>
-    import { onMount } from "svelte";
-    import App from "./App.svelte";
+    import {onMount} from "svelte";
 
     export let id;
 
