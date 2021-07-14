@@ -12,7 +12,7 @@ func NewGameRepository() domain.GameRepository {
 	return brokenGameRepository{}
 }
 
-func (r brokenGameRepository) Save(_ domain.Game) error {
+func (r brokenGameRepository) Save(_ *domain.Game) error {
 	return errors.New("unable to save")
 }
 

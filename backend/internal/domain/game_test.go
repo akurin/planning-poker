@@ -70,32 +70,3 @@ func Test_Game_Add_Player(t *testing.T) {
 		})
 	}
 }
-
-func Test_New_Game(t *testing.T) {
-	type args struct {
-		id GameId
-	}
-	tests := []struct {
-		name string
-		args args
-		want Game
-	}{
-		{
-			name: "Create a new game",
-			args: args{
-				id: "some",
-			},
-			want: Game{
-				id:      "some",
-				players: []Player{},
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := NewGame(tt.args.id); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Got %v, want %v", got, tt.want)
-			}
-		})
-	}
-}

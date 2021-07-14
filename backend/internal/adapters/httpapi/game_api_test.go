@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-)
+)	
 
 func Test_Get_Game_When_Repository_Is_Broken(t *testing.T) {
 	findGameUseCase := NewFindGameMock()
@@ -17,13 +17,13 @@ func Test_Get_Game_When_Repository_Is_Broken(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/games/1", nil)
 	rr := httptest.NewRecorder()
 
-	handleWithApi(sut, rr, req)
+	handleWithGameApi(sut, rr, req)
 
 	assert.Equal(t, http.StatusInternalServerError, rr.Code)
 	assert.Equal(t, "Internal Server Error\n", rr.Body.String())
 }
 
-func handleWithApi(api *GameApi, w http.ResponseWriter, req *http.Request) {
+func handleWithGameApi(api *GameApi, w http.ResponseWriter, req *http.Request) {
 	router := mux.NewRouter()
 	api.AddRoutes(router)
 
@@ -38,7 +38,7 @@ func Test_Get_Non_Existent_Game(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/games/1", nil)
 	rr := httptest.NewRecorder()
 
-	handleWithApi(sut, rr, req)
+	handleWithGameApi(sut, rr, req)
 
 	assert.Equal(t, http.StatusNotFound, rr.Code)
 	assert.Equal(t, "404 page not found\n", rr.Body.String())
@@ -55,9 +55,8 @@ func Test_Get_Existent_Game(t *testing.T) {
 		"id": "1"
 	}`
 
-	handleWithApi(sut, rr, req)
+	handleWithGameApi(sut, rr, req)
 
 	assert.Equal(t, http.StatusOK, rr.Code)
-	s := rr.Body.String()
-	assert.JSONEq(t, wantBody, s)
+	assert.JSONEq(t, wantBody, rr.Body.String())
 }

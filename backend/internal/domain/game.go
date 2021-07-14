@@ -15,6 +15,9 @@ func (g *Game) addPlayer(p Player) {
 
 type GameId string
 
-func NewGame(id GameId) Game {
-	return Game{id: id, players: []Player{}}
+func NewGame(id GameId) *Game {
+	return &Game{
+		id:      id,
+		players: []Player{},
+	}
 }

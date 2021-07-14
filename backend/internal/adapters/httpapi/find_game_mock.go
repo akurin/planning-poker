@@ -23,7 +23,7 @@ func (m *findGameMock) ReturnError() {
 	m.error = errors.New("some error")
 }
 
-func (m *findGameMock) ReturnGame(game domain.Game) {
-	m.game = &game
+func (m *findGameMock) ReturnGame(game *domain.Game) {
+	m.game = game
 	m.error = nil
 }

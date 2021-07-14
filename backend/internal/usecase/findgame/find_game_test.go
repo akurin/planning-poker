@@ -1,39 +1,45 @@
 package findgame
 
 import (
+	"backend/internal/adapters/brokenrepository"
+	"backend/internal/adapters/inmemory"
 	"backend/internal/domain"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
 
-func Test_findGame_Execute(t *testing.T) {
-	type args struct {
-		id domain.GameId
+func Test_Find_Game(t *testing.T) {
+	gameId := domain.GameId("some")
+	givenGame := domain.NewGame(gameId)
+	gameRepository := inmemory.NewGameRepository()
+	_ = gameRepository.Save(givenGame)
+	sut := NewFindGame(gameRepository)
+
+	foundGame, err := sut.Execute(gameId)
+
+	assert.Nil(t, err)
+	if !reflect.DeepEqual(foundGame, givenGame) {
+		t.Errorf("Got %v, want %v", foundGame, givenGame)
 	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *domain.Player
-		wantErr bool
-	}{
-		{
-			name:    "Find game",
-			args:    args{},
-			want:    nil,
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			f := findGame{}
-			got, err := f.Execute(tt.args.id)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Execute() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Execute() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
+}
+
+func Test_Find_Game_Fails(t *testing.T) {
+	gameId := domain.GameId("some")
+	sut := NewFindGame(brokenrepository.NewGameRepository())
+
+	game, err := sut.Execute(gameId)
+
+	assert.NotNil(t, err)
+	assert.Nil(t, game)
+}
+
+func Test_Find_Non_Existent_Game(t *testing.T) {
+	gameId := domain.GameId("some")
+	sut := NewFindGame(inmemory.NewGameRepository())
+
+	game, err := sut.Execute(gameId)
+
+	assert.Nil(t, err)
+	assert.Nil(t, game)
 }
