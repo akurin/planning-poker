@@ -1,17 +1,16 @@
 package httpapi
 
 import (
-	"backend/internal/adapters/httpapi/httpconfig"
 	"github.com/gorilla/mux"
 	"net/http"
 	"path"
 )
 
 type GamesApi struct {
-	config httpconfig.HttpApiConfig
+	config HttpApiConfig
 }
 
-func NewGamesApi(config httpconfig.HttpApiConfig) *GamesApi {
+func NewGamesApi(config HttpApiConfig) *GamesApi {
 	return &GamesApi{
 		config: config,
 	}

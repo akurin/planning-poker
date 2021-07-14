@@ -1,4 +1,4 @@
-package httpconfig
+package httpapi
 
 import "net/url"
 

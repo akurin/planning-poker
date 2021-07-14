@@ -1,4 +1,4 @@
-package brokenrepository
+package brokenrepo
 
 import (
 	"backend/internal/domain"

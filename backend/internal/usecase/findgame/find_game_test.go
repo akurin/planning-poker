@@ -1,8 +1,8 @@
 package findgame
 
 import (
-	"backend/internal/adapters/brokenrepository"
-	"backend/internal/adapters/inmemory"
+	"backend/internal/adapters/brokenrepo"
+	"backend/internal/adapters/inmemoryrepo"
 	"backend/internal/domain"
 	"github.com/stretchr/testify/assert"
 	"reflect"
@@ -12,7 +12,7 @@ import (
 func Test_Find_Game(t *testing.T) {
 	gameId := domain.GameId("some")
 	givenGame := domain.NewGame(gameId)
-	gameRepository := inmemory.NewGameRepository()
+	gameRepository := inmemoryrepo.NewGameRepository()
 	_ = gameRepository.Save(givenGame)
 	sut := NewFindGame(gameRepository)
 
@@ -26,7 +26,7 @@ func Test_Find_Game(t *testing.T) {
 
 func Test_Find_Game_Fails(t *testing.T) {
 	gameId := domain.GameId("some")
-	sut := NewFindGame(brokenrepository.NewGameRepository())
+	sut := NewFindGame(brokenrepo.NewGameRepository())
 
 	game, err := sut.Execute(gameId)
 
@@ -36,7 +36,7 @@ func Test_Find_Game_Fails(t *testing.T) {
 
 func Test_Find_Non_Existent_Game(t *testing.T) {
 	gameId := domain.GameId("some")
-	sut := NewFindGame(inmemory.NewGameRepository())
+	sut := NewFindGame(inmemoryrepo.NewGameRepository())
 
 	game, err := sut.Execute(gameId)
 

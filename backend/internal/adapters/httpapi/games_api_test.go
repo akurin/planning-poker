@@ -1,7 +1,6 @@
 package httpapi
 
 import (
-	"backend/internal/adapters/httpapi/httpconfig"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -13,7 +12,7 @@ import (
 
 func Test_Start_a_new_game(t *testing.T) {
 	basePath, _ := url.Parse("http://mydomain")
-	config := httpconfig.NewHttpApiConfig(basePath)
+	config := NewHttpApiConfig(basePath)
 	sut := NewGamesApi(config)
 
 	reqBody := `{ "title": "Sprint 23 planning" }`

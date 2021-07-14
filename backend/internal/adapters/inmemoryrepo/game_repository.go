@@ -1,4 +1,4 @@
-package inmemory
+package inmemoryrepo
 
 import "backend/internal/domain"
 
