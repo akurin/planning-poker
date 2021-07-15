@@ -39,6 +39,27 @@ func Test_Start_a_new_game(t *testing.T) {
 	assert.Equal(t, "https://mydomain/games/b06d89ce-4be5-4f19-9e69-04e79a83c6c1", location)
 }
 
+func Test_Start_a_new_game_when_use_case_fails(t *testing.T) {
+	basePath, err := url.Parse("https://mydomain")
+	require.NoError(t, err)
+	config := httpapi.NewHttpApiConfig(basePath)
+
+	startGameUseCaseMock := startgameusecase.Mock()
+	startGameUseCaseMock.ReturnError()
+
+	sut := NewGamesApi(config, startGameUseCaseMock)
+
+	reqBody := `{ "title": "Sprint 23 planning" }`
+	req, err := http.NewRequest("POST", "/games", strings.NewReader(reqBody))
+	require.NoError(t, err)
+	rr := httptest.NewRecorder()
+
+	handleWithGamesApi(sut, rr, req)
+
+	assert.Equal(t, http.StatusInternalServerError, rr.Code)
+	assert.Equal(t, "Internal Server Error\n", rr.Body.String())
+}
+
 func handleWithGamesApi(api *GamesApi, w http.ResponseWriter, req *http.Request) {
 	router := mux.NewRouter()
 	api.AddRoutes(router)
