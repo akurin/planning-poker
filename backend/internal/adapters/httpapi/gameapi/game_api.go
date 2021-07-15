@@ -18,10 +18,10 @@ func NewGameApi(findGame findgameusecase.UseCase) *GameApi {
 }
 
 func (a *GameApi) AddRoutes(router *mux.Router) {
-	router.HandleFunc("/games/{id}", a.getPlayer).Methods("GET")
+	router.HandleFunc("/games/{id}", a.get).Methods("GET")
 }
 
-func (a *GameApi) getPlayer(w http.ResponseWriter, r *http.Request) {
+func (a *GameApi) get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	parsed, err := domain.ParseGameId(id)
