@@ -14,7 +14,7 @@ func Mock() *findGameUseCaseMock {
 	return &findGameUseCaseMock{}
 }
 
-func (m *findGameUseCaseMock) Execute(id domain.GameId) (*domain.Game, error) {
+func (m *findGameUseCaseMock) Execute(_ domain.GameId) (*domain.Game, error) {
 	return m.game, m.error
 }
 

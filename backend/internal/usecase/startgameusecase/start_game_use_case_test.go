@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func Test_Start_Game(t *testing.T) {
+func Test_Start_game(t *testing.T) {
 	gameRepository := inmemoryrepo.NewGameRepository()
 	sut := New(gameRepository)
 
@@ -18,8 +18,9 @@ func Test_Start_Game(t *testing.T) {
 	assert.NotNil(t, startedGame)
 }
 
-func Test_Start_Game_Fails(t *testing.T) {
-	sut := New(brokenrepo.NewGameRepository())
+func Test_Broken_repository(t *testing.T) {
+	gameRepository := brokenrepo.NewGameRepository()
+	sut := New(gameRepository)
 
 	startedGameId, err := sut.Execute()
 
