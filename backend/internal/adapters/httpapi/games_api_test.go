@@ -1,8 +1,10 @@
 package httpapi
 
 import (
+	"backend/internal/domain"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -11,9 +13,14 @@ import (
 )
 
 func Test_Start_a_new_game(t *testing.T) {
-	basePath, _ := url.Parse("http://mydomain")
+	basePath, err := url.Parse("https://mydomain")
+	require.NoError(t, err)
 	config := NewHttpApiConfig(basePath)
-	sut := NewGamesApi(config)
+	startGameUseCaseMock := NewStartGameUseCaseMock()
+	gameId, err := domain.ParseGameId("b06d89ce-4be5-4f19-9e69-04e79a83c6c1")
+	require.NoError(t, err)
+	startGameUseCaseMock.ReturnGameId(gameId)
+	sut := NewGamesApi(config, startGameUseCaseMock)
 
 	reqBody := `{ "title": "Sprint 23 planning" }`
 	req, _ := http.NewRequest("POST", "/games", strings.NewReader(reqBody))
@@ -23,7 +30,7 @@ func Test_Start_a_new_game(t *testing.T) {
 
 	assert.Equal(t, http.StatusCreated, rr.Code)
 	location := rr.Header().Get("location")
-	assert.Equal(t, "http://mydomain/games/1", location)
+	assert.Equal(t, "https://mydomain/games/b06d89ce-4be5-4f19-9e69-04e79a83c6c1", location)
 }
 
 func handleWithGamesApi(api *GamesApi, w http.ResponseWriter, req *http.Request) {

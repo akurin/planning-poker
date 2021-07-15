@@ -9,10 +9,10 @@ import (
 )
 
 type GameApi struct {
-	findGame findgame.FindGame
+	findGame findgame.UseCase
 }
 
-func NewGameApi(findGame findgame.FindGame) *GameApi {
+func NewGameApi(findGame findgame.UseCase) *GameApi {
 	return &GameApi{findGame: findGame}
 }
 
@@ -23,7 +23,12 @@ func (a *GameApi) AddRoutes(router *mux.Router) {
 func (a *GameApi) getPlayer(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	game, err := a.findGame.Execute(domain.GameId(id))
+	parsed, err := domain.ParseGameId(id)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	game, err := a.findGame.Execute(parsed)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
@@ -33,7 +38,7 @@ func (a *GameApi) getPlayer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	result := gameDto{
-		Id: string(game.Id()),
+		Id: game.Id().String(),
 	}
 	_ = json.NewEncoder(w).Encode(result)
 }

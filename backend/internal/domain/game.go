@@ -1,5 +1,19 @@
 package domain
 
+import "github.com/google/uuid"
+
+type GameId interface {
+	String() string
+}
+
+func ParseGameId(s string) (GameId, error) {
+	return uuid.Parse(s)
+}
+
+func NewGameId() GameId {
+	return uuid.New()
+}
+
 type Game struct {
 	id      GameId
 	players []Player
@@ -13,9 +27,14 @@ func (g *Game) addPlayer(p Player) {
 	g.players = append(g.players, p)
 }
 
-type GameId string
+func NewGame() *Game {
+	return &Game{
+		id:      NewGameId(),
+		players: []Player{},
+	}
+}
 
-func NewGame(id GameId) *Game {
+func NewGameWithId(id GameId) *Game {
 	return &Game{
 		id:      id,
 		players: []Player{},

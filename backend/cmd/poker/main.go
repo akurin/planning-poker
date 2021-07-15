@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	findGameUseCase := findgame.NewFindGame(inmemoryrepo.NewGameRepository())
+	findGameUseCase := findgame.New(inmemoryrepo.NewGameRepository())
 	gameApi := httpapi.NewGameApi(findGameUseCase)
 	serverFactory := httpapi.NewServerFactory(gameApi)
 	server := serverFactory.NewServer()

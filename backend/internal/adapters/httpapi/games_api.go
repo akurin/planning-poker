@@ -1,18 +1,22 @@
 package httpapi
 
 import (
+	"backend/internal/usecase/startgame"
+	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"path"
 )
 
 type GamesApi struct {
-	config HttpApiConfig
+	config           HttpApiConfig
+	startGameUseCase startgame.UseCase
 }
 
-func NewGamesApi(config HttpApiConfig) *GamesApi {
+func NewGamesApi(config HttpApiConfig, startGameUseCase startgame.UseCase) *GamesApi {
 	return &GamesApi{
-		config: config,
+		config:           config,
+		startGameUseCase: startGameUseCase,
 	}
 }
 
@@ -21,8 +25,14 @@ func (a *GamesApi) AddRoutes(router *mux.Router) {
 }
 
 func (a *GamesApi) post(w http.ResponseWriter, _ *http.Request) {
+	gameId, err := a.startGameUseCase.Execute()
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 	location := a.config.BasePath()
-	location.Path = path.Join(location.Path, "/games/1")
+	location.Path = path.Join(location.Path, fmt.Sprintf("/games/%s", gameId))
 	w.Header().Set("Location", location.String())
 	w.WriteHeader(http.StatusCreated)
 }

@@ -2,21 +2,21 @@ package findgame
 
 import "backend/internal/domain"
 
-type FindGame interface {
+type UseCase interface {
 	Execute(id domain.GameId) (*domain.Game, error)
 }
 
-func NewFindGame(gameRepository domain.GameRepository) FindGame {
-	return &findGame{
+func New(gameRepository domain.GameRepository) UseCase {
+	return &findGameUseCase{
 		gameRepository: gameRepository,
 	}
 }
 
-type findGame struct {
+type findGameUseCase struct {
 	gameRepository domain.GameRepository
 }
 
-func (f *findGame) Execute(id domain.GameId) (*domain.Game, error) {
+func (f *findGameUseCase) Execute(id domain.GameId) (*domain.Game, error) {
 	game, err := f.gameRepository.FindById(id)
 	if err != nil {
 		return nil, err

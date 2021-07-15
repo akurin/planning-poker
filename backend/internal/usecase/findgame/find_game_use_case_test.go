@@ -10,13 +10,12 @@ import (
 )
 
 func Test_Find_Game(t *testing.T) {
-	gameId := domain.GameId("some")
-	givenGame := domain.NewGame(gameId)
+	givenGame := domain.NewGame()
 	gameRepository := inmemoryrepo.NewGameRepository()
 	_ = gameRepository.Save(givenGame)
-	sut := NewFindGame(gameRepository)
+	sut := New(gameRepository)
 
-	foundGame, err := sut.Execute(gameId)
+	foundGame, err := sut.Execute(givenGame.Id())
 
 	assert.Nil(t, err)
 	if !reflect.DeepEqual(foundGame, givenGame) {
@@ -25,8 +24,8 @@ func Test_Find_Game(t *testing.T) {
 }
 
 func Test_Find_Game_Fails(t *testing.T) {
-	gameId := domain.GameId("some")
-	sut := NewFindGame(brokenrepo.NewGameRepository())
+	gameId := domain.NewGameId()
+	sut := New(brokenrepo.NewGameRepository())
 
 	game, err := sut.Execute(gameId)
 
@@ -35,8 +34,8 @@ func Test_Find_Game_Fails(t *testing.T) {
 }
 
 func Test_Find_Non_Existent_Game(t *testing.T) {
-	gameId := domain.GameId("some")
-	sut := NewFindGame(inmemoryrepo.NewGameRepository())
+	gameId := domain.NewGameId()
+	sut := New(inmemoryrepo.NewGameRepository())
 
 	game, err := sut.Execute(gameId)
 
