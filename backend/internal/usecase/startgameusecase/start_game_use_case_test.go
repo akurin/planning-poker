@@ -1,4 +1,4 @@
-package startgame
+package startgameusecase
 
 import (
 	"backend/internal/adapters/brokenrepo"

@@ -1,4 +1,4 @@
-package startgame
+package startgameusecase
 
 import (
 	"backend/internal/domain"
@@ -10,8 +10,10 @@ type startGameUseCaseMock struct {
 	error  error
 }
 
-func NewStartGameUseCaseMock() *startGameUseCaseMock {
-	return &startGameUseCaseMock{}
+func Mock() *startGameUseCaseMock {
+	return &startGameUseCaseMock{
+		gameId: domain.NewGameId(),
+	}
 }
 
 func (m *startGameUseCaseMock) Execute() (domain.GameId, error) {

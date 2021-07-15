@@ -3,17 +3,17 @@ package gameapi
 import (
 	"backend/internal/adapters/httpapi/dtos"
 	"backend/internal/domain"
-	"backend/internal/usecase/findgame"
+	"backend/internal/usecase/findgameusecase"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 type GameApi struct {
-	findGame findgame.UseCase
+	findGame findgameusecase.UseCase
 }
 
-func NewGameApi(findGame findgame.UseCase) *GameApi {
+func NewGameApi(findGame findgameusecase.UseCase) *GameApi {
 	return &GameApi{findGame: findGame}
 }
 

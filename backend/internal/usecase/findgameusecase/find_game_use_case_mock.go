@@ -1,4 +1,4 @@
-package findgame
+package findgameusecase
 
 import (
 	"backend/internal/domain"
@@ -10,7 +10,7 @@ type findGameUseCaseMock struct {
 	error error
 }
 
-func NewFindGameUseCaseMock() *findGameUseCaseMock {
+func Mock() *findGameUseCaseMock {
 	return &findGameUseCaseMock{}
 }
 

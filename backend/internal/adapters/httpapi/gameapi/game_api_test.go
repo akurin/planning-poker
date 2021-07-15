@@ -2,7 +2,7 @@ package gameapi
 
 import (
 	"backend/internal/domain"
-	"backend/internal/usecase/findgame"
+	"backend/internal/usecase/findgameusecase"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 )
 
 func Test_Get_Game_When_Repository_Is_Broken(t *testing.T) {
-	findGameUseCase := findgame.NewFindGameUseCaseMock()
+	findGameUseCase := findgameusecase.Mock()
 	findGameUseCase.ReturnError()
 
 	sut := NewGameApi(findGameUseCase)
@@ -33,7 +33,7 @@ func handleWithGameApi(api *GameApi, w http.ResponseWriter, req *http.Request) {
 }
 
 func Test_Get_Non_Existent_Game(t *testing.T) {
-	findGameUseCase := findgame.NewFindGameUseCaseMock()
+	findGameUseCase := findgameusecase.Mock()
 
 	sut := NewGameApi(findGameUseCase)
 	req, _ := http.NewRequest("GET", "/games/b06d89ce-4be5-4f19-9e69-04e79a83c6c1", nil)
@@ -46,7 +46,7 @@ func Test_Get_Non_Existent_Game(t *testing.T) {
 }
 
 func Test_Get_By_Invalid_Id(t *testing.T) {
-	findGameUseCase := findgame.NewFindGameUseCaseMock()
+	findGameUseCase := findgameusecase.Mock()
 
 	sut := NewGameApi(findGameUseCase)
 	req, _ := http.NewRequest("GET", "/games/1", nil)
@@ -59,7 +59,7 @@ func Test_Get_By_Invalid_Id(t *testing.T) {
 }
 
 func Test_Get_Existent_Game(t *testing.T) {
-	findGameUseCase := findgame.NewFindGameUseCaseMock()
+	findGameUseCase := findgameusecase.Mock()
 	gameId, _ := domain.ParseGameId("b06d89ce-4be5-4f19-9e69-04e79a83c6c1")
 	game := domain.NewGameWithId(gameId)
 	findGameUseCase.ReturnGame(game)

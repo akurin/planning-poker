@@ -4,12 +4,12 @@ import (
 	"backend/internal/adapters/httpapi"
 	"backend/internal/adapters/httpapi/gameapi"
 	"backend/internal/adapters/inmemoryrepo"
-	"backend/internal/usecase/findgame"
+	"backend/internal/usecase/findgameusecase"
 	"log"
 )
 
 func main() {
-	findGameUseCase := findgame.New(inmemoryrepo.NewGameRepository())
+	findGameUseCase := findgameusecase.New(inmemoryrepo.NewGameRepository())
 	gameApi := gameapi.NewGameApi(findGameUseCase)
 	serverFactory := httpapi.NewServerFactory(gameApi)
 	server := serverFactory.NewServer()

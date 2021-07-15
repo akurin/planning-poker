@@ -1,4 +1,4 @@
-package findgame
+package findgameusecase
 
 import "backend/internal/domain"
 
