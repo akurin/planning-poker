@@ -19,14 +19,6 @@ type Game struct {
 	players []Player
 }
 
-func (g *Game) Id() GameId {
-	return g.id
-}
-
-func (g *Game) addPlayer(p Player) {
-	g.players = append(g.players, p)
-}
-
 func NewGame() *Game {
 	return &Game{
 		id:      NewGameId(),
@@ -34,9 +26,28 @@ func NewGame() *Game {
 	}
 }
 
+func (g *Game) Id() GameId {
+	return g.id
+}
+
+func (g *Game) Players() []Player {
+	return g.players
+}
+
+func (g *Game) AddPlayer(p Player) {
+	g.players = append(g.players, p)
+}
+
 func NewGameWithId(id GameId) *Game {
 	return &Game{
 		id:      id,
 		players: []Player{},
+	}
+}
+
+func NewGameWith(id GameId, players []Player) *Game {
+	return &Game{
+		id:      id,
+		players: players,
 	}
 }

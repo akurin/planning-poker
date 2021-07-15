@@ -1,72 +1,28 @@
 package domain
 
 import (
-	"reflect"
+	"backend/internal/assertions"
 	"testing"
 )
 
-func Test_Game_Add_Player(t *testing.T) {
-	type fields struct {
-		players []Player
-	}
-	type args struct {
-		p Player
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   *Game
-	}{
-		{
-			name: "Add player to an empty game",
-			fields: fields{
-				players: nil,
-			},
-			args: args{
-				p: Player{
-					name: "some player",
-				},
-			},
-			want: &Game{
-				players: []Player{
-					{name: "some player"},
-				},
-			},
-		},
-		{
-			name: "Add player to a non-empty game",
-			fields: fields{
-				players: []Player{
-					{
-						name: "player1",
-					},
-				},
-			},
-			args: args{
-				p: Player{
-					name: "player2",
-				},
-			},
-			want: &Game{
-				players: []Player{
-					{name: "player1"},
-					{name: "player2"},
-				},
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			sut := &Game{
-				players: tt.fields.players,
-			}
+func Test_first_player_joins_game(t *testing.T) {
+	sut := NewGame()
+	player := NewPlayer("some-id", "player-1")
+	wantPlayers := []Player{player}
 
-			sut.addPlayer(tt.args.p)
+	sut.AddPlayer(player)
 
-			if !reflect.DeepEqual(sut, tt.want) {
-				t.Errorf("Got %v, want %v", sut, tt.want)
-			}
-		})
-	}
+	assertions.DeepEqual(t, sut.Players(), wantPlayers)
+}
+
+func Test_second_player_joins_game(t *testing.T) {
+	sut := NewGame()
+	player1 := NewPlayer("1", "player-1")
+	player2 := NewPlayer("2", "player-2")
+	wantPlayers := []Player{player1, player2}
+
+	sut.AddPlayer(player1)
+	sut.AddPlayer(player2)
+
+	assertions.DeepEqual(t, sut.Players(), wantPlayers)
 }

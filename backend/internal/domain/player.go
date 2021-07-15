@@ -5,6 +5,10 @@ type Player struct {
 	name string
 }
 
+func NewPlayer(id PlayerId, name string) Player {
+	return Player{id: id, name: name}
+}
+
 func (p Player) Id() PlayerId {
 	return p.id
 }
@@ -14,7 +18,3 @@ func (p Player) Name() string {
 }
 
 type PlayerId string
-
-func NewPlayer(id PlayerId, name string) Player {
-	return Player{id: id, name: name}
-}
