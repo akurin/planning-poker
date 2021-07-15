@@ -1,6 +1,7 @@
-package httpapi
+package gameapi
 
 import (
+	"backend/internal/adapters/httpapi/dtos"
 	"backend/internal/domain"
 	"backend/internal/usecase/findgame"
 	"encoding/json"
@@ -37,7 +38,7 @@ func (a *GameApi) getPlayer(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	result := gameDto{
+	result := dtos.GameDto{
 		Id: game.Id().String(),
 	}
 	_ = json.NewEncoder(w).Encode(result)

@@ -1,4 +1,4 @@
-package httpapi
+package dtos
 
 type playerDto struct {
 	Id   string `json:"id"`

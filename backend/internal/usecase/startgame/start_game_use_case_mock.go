@@ -1,4 +1,4 @@
-package httpapi
+package startgame
 
 import (
 	"backend/internal/domain"

@@ -1,6 +1,7 @@
-package httpapi
+package gamesapi
 
 import (
+	"backend/internal/adapters/httpapi"
 	"backend/internal/usecase/startgame"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -9,11 +10,11 @@ import (
 )
 
 type GamesApi struct {
-	config           HttpApiConfig
+	config           httpapi.HttpApiConfig
 	startGameUseCase startgame.UseCase
 }
 
-func NewGamesApi(config HttpApiConfig, startGameUseCase startgame.UseCase) *GamesApi {
+func NewGamesApi(config httpapi.HttpApiConfig, startGameUseCase startgame.UseCase) *GamesApi {
 	return &GamesApi{
 		config:           config,
 		startGameUseCase: startGameUseCase,

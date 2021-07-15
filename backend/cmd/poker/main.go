@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/internal/adapters/httpapi"
+	"backend/internal/adapters/httpapi/gameapi"
 	"backend/internal/adapters/inmemoryrepo"
 	"backend/internal/usecase/findgame"
 	"log"
@@ -9,7 +10,7 @@ import (
 
 func main() {
 	findGameUseCase := findgame.New(inmemoryrepo.NewGameRepository())
-	gameApi := httpapi.NewGameApi(findGameUseCase)
+	gameApi := gameapi.NewGameApi(findGameUseCase)
 	serverFactory := httpapi.NewServerFactory(gameApi)
 	server := serverFactory.NewServer()
 

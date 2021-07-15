@@ -1,4 +1,4 @@
-package httpapi
+package findgame
 
 import (
 	"backend/internal/domain"

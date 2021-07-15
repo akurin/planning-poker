@@ -1,7 +1,9 @@
-package httpapi
+package gamesapi
 
 import (
+	"backend/internal/adapters/httpapi"
 	"backend/internal/domain"
+	"backend/internal/usecase/startgame"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -15,8 +17,8 @@ import (
 func Test_Start_a_new_game(t *testing.T) {
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
-	config := NewHttpApiConfig(basePath)
-	startGameUseCaseMock := NewStartGameUseCaseMock()
+	config := httpapi.NewHttpApiConfig(basePath)
+	startGameUseCaseMock := startgame.NewStartGameUseCaseMock()
 	gameId, err := domain.ParseGameId("b06d89ce-4be5-4f19-9e69-04e79a83c6c1")
 	require.NoError(t, err)
 	startGameUseCaseMock.ReturnGameId(gameId)

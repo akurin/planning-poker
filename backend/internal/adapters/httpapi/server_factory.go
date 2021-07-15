@@ -1,15 +1,16 @@
 package httpapi
 
 import (
+	"backend/internal/adapters/httpapi/gameapi"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 type ServerFactory struct {
-	playerApi *GameApi
+	playerApi *gameapi.GameApi
 }
 
-func NewServerFactory(playerApi *GameApi) *ServerFactory {
+func NewServerFactory(playerApi *gameapi.GameApi) *ServerFactory {
 	return &ServerFactory{playerApi: playerApi}
 }
 
