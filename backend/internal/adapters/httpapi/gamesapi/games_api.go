@@ -10,11 +10,11 @@ import (
 )
 
 type GamesApi struct {
-	config           httpapi.HttpApiConfig
+	config           httpapi.Config
 	startGameUseCase startgame.UseCase
 }
 
-func NewGamesApi(config httpapi.HttpApiConfig, startGameUseCase startgame.UseCase) *GamesApi {
+func NewGamesApi(config httpapi.Config, startGameUseCase startgame.UseCase) *GamesApi {
 	return &GamesApi{
 		config:           config,
 		startGameUseCase: startGameUseCase,

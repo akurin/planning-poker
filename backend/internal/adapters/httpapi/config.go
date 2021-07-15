@@ -2,7 +2,7 @@ package httpapi
 
 import "net/url"
 
-type HttpApiConfig interface {
+type Config interface {
 	BasePath() *url.URL
 }
 
@@ -10,7 +10,7 @@ type httpApiConfig struct {
 	url *url.URL
 }
 
-func NewHttpApiConfig(url *url.URL) HttpApiConfig {
+func NewHttpApiConfig(url *url.URL) Config {
 	return httpApiConfig{
 		url: url,
 	}
