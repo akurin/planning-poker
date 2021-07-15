@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_first_player_joins_game(t *testing.T) {
+func Test_First_player_joins_game(t *testing.T) {
 	sut := NewGame()
 	player := NewPlayer("some-id", "player-1")
 	wantPlayers := []Player{player}
@@ -15,7 +15,7 @@ func Test_first_player_joins_game(t *testing.T) {
 	assertions.DeepEqual(t, sut.Players(), wantPlayers)
 }
 
-func Test_second_player_joins_game(t *testing.T) {
+func Test_Second_player_joins_game(t *testing.T) {
 	sut := NewGame()
 	player1 := NewPlayer("1", "player-1")
 	player2 := NewPlayer("2", "player-2")
