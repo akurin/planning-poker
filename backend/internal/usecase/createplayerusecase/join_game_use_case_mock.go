@@ -5,27 +5,27 @@ import (
 	"errors"
 )
 
-type startGameUseCaseMock struct {
-	gameId domain.GameId
-	error  error
+type createPlayerUseCaseMock struct {
+	playerId domain.PlayerId
+	error    error
 }
 
-func Mock() *startGameUseCaseMock {
-	return &startGameUseCaseMock{
-		gameId: domain.NewGameId(),
+func Mock() *createPlayerUseCaseMock {
+	return &createPlayerUseCaseMock{
+		playerId: domain.NewFakePlayerId("some"),
 	}
 }
 
-func (m *startGameUseCaseMock) Execute() (domain.GameId, error) {
-	return m.gameId, m.error
+func (m *createPlayerUseCaseMock) Execute(_ string) (domain.PlayerId, error) {
+	return m.playerId, m.error
 }
 
-func (m *startGameUseCaseMock) ReturnError() {
-	m.gameId = nil
+func (m *createPlayerUseCaseMock) ReturnError() {
+	m.playerId = nil
 	m.error = errors.New("some error")
 }
 
-func (m *startGameUseCaseMock) ReturnGameId(gameId domain.GameId) {
-	m.gameId = gameId
+func (m *createPlayerUseCaseMock) ReturnPlayerId(gameId domain.PlayerId) {
+	m.playerId = gameId
 	m.error = nil
 }
