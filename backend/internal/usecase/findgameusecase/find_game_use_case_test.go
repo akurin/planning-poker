@@ -3,7 +3,6 @@ package findgameusecase
 import (
 	"backend/internal/adapters/brokenrepo"
 	"backend/internal/adapters/inmemoryrepo"
-	"backend/internal/assertions"
 	"backend/internal/domain"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -18,7 +17,7 @@ func Test_Game_found(t *testing.T) {
 	foundGame, err := sut.Execute(givenGame.Id())
 
 	assert.Nil(t, err)
-	assertions.DeepEqual(t, foundGame, givenGame)
+	assert.Equal(t, givenGame, foundGame)
 }
 
 func Test_Game_not_found(t *testing.T) {

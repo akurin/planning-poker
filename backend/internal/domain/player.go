@@ -21,4 +21,3 @@ func (p *Player) Join(game *Game) {
 	game.AddPlayer(p)
 }
 
-type PlayerId string

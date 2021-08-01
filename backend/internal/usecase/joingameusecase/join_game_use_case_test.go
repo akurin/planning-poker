@@ -10,7 +10,7 @@ import (
 
 func Test_Join_game(t *testing.T) {
 	// arrange
-	player := domain.NewPlayer("1", "name")
+	player := domain.NewPlayer(domain.NewFakePlayerId("some"), "name")
 	playerRepository := inmemoryrepo.NewPlayerRepository()
 	err := playerRepository.Save(player)
 	require.NoError(t, err)
@@ -35,7 +35,7 @@ func Test_Join_game(t *testing.T) {
 func Test_Join_game_when_player_not_found(t *testing.T) {
 	// arrange
 	playerRepository := inmemoryrepo.NewPlayerRepository()
-	playerId := domain.PlayerId("some player id")
+	playerId := domain.NewFakePlayerId("some player id")
 
 	gameRepository := inmemoryrepo.NewGameRepository()
 	game := domain.NewGame()
@@ -53,7 +53,7 @@ func Test_Join_game_when_player_not_found(t *testing.T) {
 
 func Test_Join_game_when_game_not_found(t *testing.T) {
 	// arrange
-	player := domain.NewPlayer("1", "name")
+	player := domain.NewPlayer(domain.NewFakePlayerId("1"), "name")
 	playerRepository := inmemoryrepo.NewPlayerRepository()
 	err := playerRepository.Save(player)
 	require.NoError(t, err)

@@ -17,5 +17,5 @@ func (r brokenGameRepository) Save(_ *domain.Game) error {
 }
 
 func (r brokenGameRepository) FindById(_ domain.GameId) (*domain.Game, error) {
-	return nil, errors.New("unable to find player by id")
+	return nil, errors.New("unable to find game by id")
 }

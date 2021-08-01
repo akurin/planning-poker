@@ -1,28 +1,34 @@
 package domain
 
 import (
-	"backend/internal/assertions"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func Test_First_player_joins_game(t *testing.T) {
+	// arrange
 	sut := NewGame()
-	player := NewPlayer("some-id", "player-1")
-	wantPlayers := []*Player{player}
+	player := NewPlayer(NewFakePlayerId("some"), "player-1")
+	expectedPlayers := []*Player{player}
 
+	// act
 	sut.AddPlayer(player)
 
-	assertions.DeepEqual(t, sut.Players(), wantPlayers)
+	// assert
+	assert.Equal(t, expectedPlayers, sut.Players())
 }
 
 func Test_Second_player_joins_game(t *testing.T) {
+	// arrange
 	sut := NewGame()
-	player1 := NewPlayer("1", "player-1")
-	player2 := NewPlayer("2", "player-2")
-	wantPlayers := []*Player{player1, player2}
+	player1 := NewPlayer(NewFakePlayerId("1"), "player-1")
+	player2 := NewPlayer(NewFakePlayerId("2"), "player-2")
+	expectedPlayers := []*Player{player1, player2}
 
+	// act
 	sut.AddPlayer(player1)
 	sut.AddPlayer(player2)
 
-	assertions.DeepEqual(t, sut.Players(), wantPlayers)
+	// assert
+	assert.Equal(t, expectedPlayers, sut.Players())
 }
