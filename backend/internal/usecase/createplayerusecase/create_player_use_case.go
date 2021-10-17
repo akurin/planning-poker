@@ -32,7 +32,10 @@ func (c *createPlayerUseCase) Execute(name string) (Result, error) {
 	if err != nil {
 		return Result{}, err
 	}
-	token, _ := c.tokenService.IssueToken(createdPlayerId)
+	token, err := c.tokenService.IssueToken(createdPlayerId)
+	if err != nil {
+		return Result{}, err
+	}
 	return NewResult(createdPlayerId, token), nil
 }
 

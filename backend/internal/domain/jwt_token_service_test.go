@@ -69,6 +69,6 @@ func Test_Invalid_key(t *testing.T) {
 	token, err := sut.IssueToken(playerId)
 
 	// Assert
-	assert.Equal(t, "", token)
+	assert.Empty(t, token)
 	assert.NotNil(t, err)
 }
