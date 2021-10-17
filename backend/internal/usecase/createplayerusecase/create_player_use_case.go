@@ -47,3 +47,11 @@ type Result struct {
 func NewResult(id domain.PlayerId, token string) Result {
 	return Result{id, token}
 }
+
+func (r Result) Id() domain.PlayerId {
+	return r.id
+}
+
+func (r Result) Token() string {
+	return r.token
+}

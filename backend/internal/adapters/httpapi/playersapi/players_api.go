@@ -41,14 +41,21 @@ func (a *PlayersApi) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	playerId, err := a.createPlayerUseCase.Execute(createPlayerDto.Name)
+	result, err := a.createPlayerUseCase.Execute(createPlayerDto.Name)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 
 	location := a.config.BasePath()
-	location.Path = path.Join(location.Path, fmt.Sprintf("/players/%s", playerId))
+	location.Path = path.Join(location.Path, fmt.Sprintf("/players/%s", result.Id()))
 	w.Header().Set("Location", location.String())
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_token",
+		Value:    result.Token(),
+		HttpOnly: true,
+	})
+
 	w.WriteHeader(http.StatusCreated)
 }

@@ -4,6 +4,7 @@ import (
 	"backend/internal/adapters/httpapi"
 	"backend/internal/domain"
 	"backend/internal/usecase/createplayerusecase"
+	"errors"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -23,8 +24,9 @@ func Test_Create_player(t *testing.T) {
 	playerId := domain.NewFakePlayerId("some-player-id")
 	require.NoError(t, err)
 
-	createPlayerUseCase := createplayerusecase.Mock()
-	createPlayerUseCase.ReturnPlayerId(playerId)
+	createPlayerUseCase := createplayerusecase.Mock(
+		createplayerusecase.WithResult(
+			createplayerusecase.NewResult(playerId, "very-secret-token")))
 
 	sut := New(config, createPlayerUseCase)
 
@@ -40,6 +42,7 @@ func Test_Create_player(t *testing.T) {
 	assert.Equal(t, http.StatusCreated, rr.Code)
 	location := rr.Header().Get("Location")
 	assert.Equal(t, "https://mydomain/players/some-player-id", location)
+	assert.Equal(t, "access_token=very-secret-token; HttpOnly", rr.Header().Get("Set-Cookie"))
 }
 
 func Test_Create_player_when_use_case_fails(t *testing.T) {
@@ -48,8 +51,8 @@ func Test_Create_player_when_use_case_fails(t *testing.T) {
 	require.NoError(t, err)
 	config := httpapi.NewHttpApiConfig(basePath)
 
-	createPlayerUseCase := createplayerusecase.Mock()
-	createPlayerUseCase.ReturnError()
+	createPlayerUseCase := createplayerusecase.Mock(
+		createplayerusecase.WithError(errors.New("some")))
 
 	sut := New(config, createPlayerUseCase)
 
