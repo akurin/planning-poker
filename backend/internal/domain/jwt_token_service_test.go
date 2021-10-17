@@ -2,6 +2,8 @@ package domain
 
 import (
 	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
 	"crypto/x509"
 	"encoding/pem"
 	"github.com/stretchr/testify/assert"
@@ -27,7 +29,7 @@ OF/2NxApJCzGCEDdfSp6VQO30hyhRANCAAQRWz+jn65BtOMvdyHKcvjBeBSDZH2r
 	sut := NewJwtTokenService(privateKey.(*ecdsa.PrivateKey), clock, time.Second)
 
 	// Act
-	token := sut.IssueToken(playerId)
+	token, _ := sut.IssueToken(playerId)
 
 	tokenWithoutSignature := dropSignature(token)
 
@@ -54,4 +56,19 @@ func parsePrivateKey(t *testing.T, privateKeyBytes []byte) interface{} {
 func dropSignature(token string) string {
 	lastDotIndex := strings.LastIndex(token, ".")
 	return token[:lastDotIndex]
+}
+
+func Test_Invalid_key(t *testing.T) {
+	// Arrange
+	privateKey, _ := ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
+	playerId := NewFakePlayerId("some-player-id")
+	clock := NewFakeClock()
+	sut := NewJwtTokenService(privateKey, clock, time.Second)
+
+	// Act
+	token, err := sut.IssueToken(playerId)
+
+	// Assert
+	assert.Equal(t, "", token)
+	assert.NotNil(t, err)
 }

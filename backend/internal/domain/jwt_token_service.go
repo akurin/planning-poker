@@ -20,7 +20,7 @@ func NewJwtTokenService(privateKey *ecdsa.PrivateKey, clock Clock, tokenTTL time
 	}
 }
 
-func (s JwtTokenService) IssueToken(playerId PlayerId) string {
+func (s JwtTokenService) IssueToken(playerId PlayerId) (string, error) {
 	claims := jwt.StandardClaims{
 		Subject:   playerId.String(),
 		IssuedAt:  s.clock.Now().Unix(),
@@ -30,7 +30,7 @@ func (s JwtTokenService) IssueToken(playerId PlayerId) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
 	signedString, err := token.SignedString(s.privateKey)
 	if err != nil {
-		panic(err) // todo
+		return "", err
 	}
-	return signedString
+	return signedString, nil
 }

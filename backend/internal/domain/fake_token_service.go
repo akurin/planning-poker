@@ -14,8 +14,8 @@ func NewFakeTokenService(opts ...FakeTokenServiceOption) fakeTokenService {
 	return result
 }
 
-func (s fakeTokenService) IssueToken(_ PlayerId) string {
-	return s.token
+func (s fakeTokenService) IssueToken(playerId PlayerId) (string, error) {
+	return s.token, nil
 }
 
 type FakeTokenServiceOption func(service *fakeTokenService)

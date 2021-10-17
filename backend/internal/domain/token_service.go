@@ -1,5 +1,5 @@
 package domain
 
 type TokenService interface {
-	IssueToken(playerId PlayerId) string
+	IssueToken(playerId PlayerId) (string, error)
 }
