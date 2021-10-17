@@ -17,14 +17,17 @@ func Test_Create_player(t *testing.T) {
 	expectedPlayer := domain.NewPlayer(stubbedPlayerId, "John Doe")
 	playerRepository := inmemoryrepo.NewPlayerRepository()
 
-	sut := New(playerIdGenerator, playerRepository)
+	tokenService := domain.NewFakeTokenService(domain.WithToken("some-token"))
+
+	sut := New(playerIdGenerator, playerRepository, tokenService)
 
 	// Act
-	createdPlayerId, err := sut.Execute("John Doe")
+	result, err := sut.Execute("John Doe")
 
 	// Assert
 	assert.NoError(t, err)
-	assert.Equal(t, stubbedPlayerId, createdPlayerId)
+	assert.Equal(t, stubbedPlayerId, result.id)
+	assert.Equal(t, "some-token", result.token)
 
 	createdPlayer, err := playerRepository.FindById(expectedPlayer.Id())
 	require.NoError(t, err)
@@ -35,7 +38,8 @@ func Test_Create_player_with_broken_repository(t *testing.T) {
 	// Arrange
 	playerIdGenerator := domain.NewUUIDPlayerIdGenerator()
 	playerRepository := brokenrepo.NewPlayerRepository()
-	sut := New(playerIdGenerator, playerRepository)
+	tokenService := domain.NewFakeTokenService()
+	sut := New(playerIdGenerator, playerRepository, tokenService)
 
 	// Act
 	createdUserId, err := sut.Execute("some")

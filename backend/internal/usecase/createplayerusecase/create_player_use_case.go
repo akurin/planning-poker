@@ -6,16 +6,22 @@ type UseCase interface {
 	Execute(name string) (Result, error)
 }
 
-func New(playerIdGenerator domain.PlayerIdGenerator, playerRepository domain.PlayerRepository) UseCase {
+func New(
+	playerIdGenerator domain.PlayerIdGenerator,
+	playerRepository domain.PlayerRepository,
+	tokenService domain.TokenService,
+) UseCase {
 	return &createPlayerUseCase{
 		playerIdGenerator: playerIdGenerator,
 		playerRepository:  playerRepository,
+		tokenService:      tokenService,
 	}
 }
 
 type createPlayerUseCase struct {
 	playerRepository  domain.PlayerRepository
 	playerIdGenerator domain.PlayerIdGenerator
+	tokenService      domain.TokenService
 }
 
 func (c *createPlayerUseCase) Execute(name string) (Result, error) {
@@ -26,10 +32,10 @@ func (c *createPlayerUseCase) Execute(name string) (Result, error) {
 	if err != nil {
 		return Result{}, err
 	}
-	return NewResult(createdPlayerId, "todo"), nil
+	token := c.tokenService.IssueToken(createdPlayerId)
+	return NewResult(createdPlayerId, token), nil
 }
 
-// todo
 type Result struct {
 	id    domain.PlayerId
 	token string
