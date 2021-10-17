@@ -9,7 +9,7 @@ import (
 )
 
 func Test_Join_game(t *testing.T) {
-	// arrange
+	// Arrange
 	player := domain.NewPlayer(domain.NewFakePlayerId("some"), "name")
 	playerRepository := inmemoryrepo.NewPlayerRepository()
 	err := playerRepository.Save(player)
@@ -22,10 +22,10 @@ func Test_Join_game(t *testing.T) {
 
 	sut := New(playerRepository, gameRepository)
 
-	// act
+	// Act
 	err = sut.Execute(player.Id(), game.Id())
 
-	// assert
+	// Assert
 	assert.NoError(t, err)
 	j, err := gameRepository.FindById(game.Id())
 	assert.NoError(t, err)
@@ -33,7 +33,7 @@ func Test_Join_game(t *testing.T) {
 }
 
 func Test_Join_game_when_player_not_found(t *testing.T) {
-	// arrange
+	// Arrange
 	playerRepository := inmemoryrepo.NewPlayerRepository()
 	playerId := domain.NewFakePlayerId("some player id")
 
@@ -44,15 +44,15 @@ func Test_Join_game_when_player_not_found(t *testing.T) {
 
 	sut := New(playerRepository, gameRepository)
 
-	// act
+	// Act
 	err = sut.Execute(playerId, game.Id())
 
-	// assert
+	// Assert
 	assert.Equal(t, NewPlayerNotFoundError(playerId), err)
 }
 
 func Test_Join_game_when_game_not_found(t *testing.T) {
-	// arrange
+	// Arrange
 	player := domain.NewPlayer(domain.NewFakePlayerId("1"), "name")
 	playerRepository := inmemoryrepo.NewPlayerRepository()
 	err := playerRepository.Save(player)
@@ -64,9 +64,9 @@ func Test_Join_game_when_game_not_found(t *testing.T) {
 
 	sut := New(playerRepository, gameRepository)
 
-	// act
+	// Act
 	err = sut.Execute(player.Id(), gameId)
 
-	// assert
+	// Assert
 	assert.Equal(t, NewGameNotFoundError(gameId), err)
 }

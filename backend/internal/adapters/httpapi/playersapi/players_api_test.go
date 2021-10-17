@@ -15,7 +15,7 @@ import (
 )
 
 func Test_Create_player(t *testing.T) {
-	// arrange
+	// Arrange
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
 	config := httpapi.NewHttpApiConfig(basePath)
@@ -33,17 +33,17 @@ func Test_Create_player(t *testing.T) {
 	require.NoError(t, err)
 	rr := httptest.NewRecorder()
 
-	// act
+	// Act
 	handleWithGamesApi(sut, rr, req)
 
-	// assert
+	// Assert
 	assert.Equal(t, http.StatusCreated, rr.Code)
 	location := rr.Header().Get("Location")
 	assert.Equal(t, "https://mydomain/players/some-player-id", location)
 }
 
 func Test_Create_player_when_use_case_fails(t *testing.T) {
-	// arrange
+	// Arrange
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
 	config := httpapi.NewHttpApiConfig(basePath)
@@ -58,16 +58,16 @@ func Test_Create_player_when_use_case_fails(t *testing.T) {
 	require.NoError(t, err)
 	rr := httptest.NewRecorder()
 
-	// act
+	// Act
 	handleWithGamesApi(sut, rr, req)
 
-	// assert
+	// Assert
 	assert.Equal(t, http.StatusInternalServerError, rr.Code)
 	assert.Equal(t, "Internal Server Error\n", rr.Body.String())
 }
 
 func Test_Create_player_with_invalid_request_body(t *testing.T) {
-	// arrange
+	// Arrange
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
 	config := httpapi.NewHttpApiConfig(basePath)
@@ -81,10 +81,10 @@ func Test_Create_player_with_invalid_request_body(t *testing.T) {
 	require.NoError(t, err)
 	rr := httptest.NewRecorder()
 
-	// act
+	// Act
 	handleWithGamesApi(sut, rr, req)
 
-	// assert
+	// Assert
 	assert.Equal(t, http.StatusBadRequest, rr.Code)
 	assert.Equal(t, "The field name is required.\n", rr.Body.String())
 }

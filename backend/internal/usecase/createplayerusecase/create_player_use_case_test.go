@@ -10,7 +10,7 @@ import (
 )
 
 func Test_Create_player(t *testing.T) {
-	// arrange
+	// Arrange
 	stubbedPlayerId := domain.NewFakePlayerId("some player id")
 	playerIdGenerator := domain.NewFakePlayerIdGenerator(stubbedPlayerId)
 
@@ -19,10 +19,10 @@ func Test_Create_player(t *testing.T) {
 
 	sut := New(playerIdGenerator, playerRepository)
 
-	// act
+	// Act
 	createdPlayerId, err := sut.Execute("John Doe")
 
-	// assert
+	// Assert
 	assert.NoError(t, err)
 	assert.Equal(t, stubbedPlayerId, createdPlayerId)
 
@@ -32,15 +32,15 @@ func Test_Create_player(t *testing.T) {
 }
 
 func Test_Create_player_with_broken_repository(t *testing.T) {
-	// arrange
+	// Arrange
 	playerIdGenerator := domain.NewUUIDPlayerIdGenerator()
 	playerRepository := brokenrepo.NewPlayerRepository()
 	sut := New(playerIdGenerator, playerRepository)
 
-	// act
+	// Act
 	createdUserId, err := sut.Execute("some")
 
-	// assert
+	// Assert
 	assert.Empty(t, createdUserId)
 	assert.NotNil(t, err)
 }

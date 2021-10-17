@@ -14,7 +14,7 @@ import (
 )
 
 func Test_Issue_token(t *testing.T) {
-	// arrange
+	// Arrange
 	privateKeyBytes := []byte(`-----BEGIN PRIVATE KEY-----
 MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgevZzL1gdAFr88hb2
 OF/2NxApJCzGCEDdfSp6VQO30hyhRANCAAQRWz+jn65BtOMvdyHKcvjBeBSDZH2r
@@ -26,12 +26,12 @@ OF/2NxApJCzGCEDdfSp6VQO30hyhRANCAAQRWz+jn65BtOMvdyHKcvjBeBSDZH2r
 	clock := NewFakeClock(WithNow(time.Unix(1634482913, 0)))
 	sut := NewJwtTokenService(privateKey.(*ecdsa.PrivateKey), clock, time.Second)
 
-	// act
+	// Act
 	token := sut.IssueToken(playerId)
 
 	tokenWithoutSignature := dropSignature(token)
 
-	// assert
+	// Assert
 
 	// Expected:
 	// {
