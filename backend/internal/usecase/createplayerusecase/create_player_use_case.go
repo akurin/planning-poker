@@ -3,7 +3,7 @@ package createplayerusecase
 import "backend/internal/domain"
 
 type UseCase interface {
-	Execute(name string) (domain.PlayerId, error)
+	Execute(name string) (Result, error)
 }
 
 func New(playerIdGenerator domain.PlayerIdGenerator, playerRepository domain.PlayerRepository) UseCase {
@@ -18,13 +18,23 @@ type createPlayerUseCase struct {
 	playerIdGenerator domain.PlayerIdGenerator
 }
 
-func (c *createPlayerUseCase) Execute(name string) (domain.PlayerId, error) {
+func (c *createPlayerUseCase) Execute(name string) (Result, error) {
 	createdPlayerId := c.playerIdGenerator.Generate()
 	createdPlayer := domain.NewPlayer(createdPlayerId, name)
 
 	err := c.playerRepository.Save(createdPlayer)
 	if err != nil {
-		return nil, err
+		return Result{}, err
 	}
-	return createdPlayerId, nil
+	return NewResult(createdPlayerId, "todo"), nil
+}
+
+// todo
+type Result struct {
+	id    domain.PlayerId
+	token string
+}
+
+func NewResult(id domain.PlayerId, token string) Result {
+	return Result{id, token}
 }
