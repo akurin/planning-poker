@@ -1,7 +1,6 @@
-package gamesapi
+package playersapi
 
 import (
-	"backend/internal/adapters/httpapi"
 	"backend/internal/domain"
 	"backend/internal/usecase/createplayerusecase"
 	"errors"
@@ -19,7 +18,6 @@ func Test_Create_player(t *testing.T) {
 	// Arrange
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
-	config := httpapi.NewHttpApiConfig(basePath)
 
 	playerId := domain.NewFakePlayerId("some-player-id")
 	require.NoError(t, err)
@@ -28,7 +26,7 @@ func Test_Create_player(t *testing.T) {
 		createplayerusecase.WithResult(
 			createplayerusecase.NewResult(playerId, "very-secret-token")))
 
-	sut := New(config, createPlayerUseCase)
+	sut := New(basePath, createPlayerUseCase)
 
 	reqBody := `{ "name": "John Doe" }`
 	req, err := http.NewRequest("POST", "/players", strings.NewReader(reqBody))
@@ -49,12 +47,11 @@ func Test_Create_player_when_use_case_fails(t *testing.T) {
 	// Arrange
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
-	config := httpapi.NewHttpApiConfig(basePath)
 
 	createPlayerUseCase := createplayerusecase.Mock(
 		createplayerusecase.WithError(errors.New("some")))
 
-	sut := New(config, createPlayerUseCase)
+	sut := New(basePath, createPlayerUseCase)
 
 	reqBody := `{ "name": "John Doe" }`
 	req, err := http.NewRequest("POST", "/players", strings.NewReader(reqBody))
@@ -73,11 +70,10 @@ func Test_Create_player_with_invalid_request_body(t *testing.T) {
 	// Arrange
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
-	config := httpapi.NewHttpApiConfig(basePath)
 
 	createPlayerUseCase := createplayerusecase.Mock()
 
-	sut := New(config, createPlayerUseCase)
+	sut := New(basePath, createPlayerUseCase)
 
 	reqBody := `{ "name": null }`
 	req, err := http.NewRequest("POST", "/players", strings.NewReader(reqBody))

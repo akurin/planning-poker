@@ -1,22 +1,22 @@
 package gamesapi
 
 import (
-	"backend/internal/adapters/httpapi"
 	"backend/internal/usecase/startgameusecase"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
+	"net/url"
 	"path"
 )
 
 type GamesApi struct {
-	config           httpapi.Config
+	basePath         *url.URL
 	startGameUseCase startgameusecase.UseCase
 }
 
-func NewGamesApi(config httpapi.Config, startGameUseCase startgameusecase.UseCase) *GamesApi {
+func NewGamesApi(basePath *url.URL, startGameUseCase startgameusecase.UseCase) *GamesApi {
 	return &GamesApi{
-		config:           config,
+		basePath:         basePath,
 		startGameUseCase: startGameUseCase,
 	}
 }
@@ -32,7 +32,7 @@ func (a *GamesApi) post(w http.ResponseWriter, _ *http.Request) {
 		return
 	}
 
-	location := a.config.BasePath()
+	location := a.basePath
 	location.Path = path.Join(location.Path, fmt.Sprintf("/games/%s", gameId))
 	w.Header().Set("Location", location.String())
 	w.WriteHeader(http.StatusCreated)

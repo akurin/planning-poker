@@ -1,7 +1,6 @@
-package gamesapi
+package playersapi
 
 import (
-	"backend/internal/adapters/httpapi"
 	"backend/internal/adapters/httpapi/dtos"
 	"backend/internal/usecase/createplayerusecase"
 	"encoding/json"
@@ -9,17 +8,18 @@ import (
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"path"
 )
 
 type PlayersApi struct {
-	config              httpapi.Config
+	basePath            *url.URL
 	createPlayerUseCase createplayerusecase.UseCase
 }
 
-func New(config httpapi.Config, createPlayerUseCase createplayerusecase.UseCase) *PlayersApi {
+func New(basePath *url.URL, createPlayerUseCase createplayerusecase.UseCase) *PlayersApi {
 	return &PlayersApi{
-		config:              config,
+		basePath:            basePath,
 		createPlayerUseCase: createPlayerUseCase,
 	}
 }
@@ -47,7 +47,7 @@ func (a *PlayersApi) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	location := a.config.BasePath()
+	location := *a.basePath
 	location.Path = path.Join(location.Path, fmt.Sprintf("/players/%s", result.Id()))
 	w.Header().Set("Location", location.String())
 

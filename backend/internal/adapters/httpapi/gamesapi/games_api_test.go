@@ -1,7 +1,6 @@
 package gamesapi
 
 import (
-	"backend/internal/adapters/httpapi"
 	"backend/internal/domain"
 	"backend/internal/usecase/startgameusecase"
 	"github.com/gorilla/mux"
@@ -17,7 +16,6 @@ import (
 func Test_Start_a_new_game(t *testing.T) {
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
-	config := httpapi.NewHttpApiConfig(basePath)
 
 	gameId, err := domain.ParseGameId("b06d89ce-4be5-4f19-9e69-04e79a83c6c1")
 	require.NoError(t, err)
@@ -25,7 +23,7 @@ func Test_Start_a_new_game(t *testing.T) {
 	startGameUseCaseMock := startgameusecase.Mock()
 	startGameUseCaseMock.ReturnGameId(gameId)
 
-	sut := NewGamesApi(config, startGameUseCaseMock)
+	sut := NewGamesApi(basePath, startGameUseCaseMock)
 
 	reqBody := `{ "title": "Sprint 23 planning" }`
 	req, err := http.NewRequest("POST", "/games", strings.NewReader(reqBody))
@@ -42,12 +40,11 @@ func Test_Start_a_new_game(t *testing.T) {
 func Test_Start_a_new_game_when_use_case_fails(t *testing.T) {
 	basePath, err := url.Parse("https://mydomain")
 	require.NoError(t, err)
-	config := httpapi.NewHttpApiConfig(basePath)
 
 	startGameUseCaseMock := startgameusecase.Mock()
 	startGameUseCaseMock.ReturnError()
 
-	sut := NewGamesApi(config, startGameUseCaseMock)
+	sut := NewGamesApi(basePath, startGameUseCaseMock)
 
 	reqBody := `{ "title": "Sprint 23 planning" }`
 	req, err := http.NewRequest("POST", "/games", strings.NewReader(reqBody))

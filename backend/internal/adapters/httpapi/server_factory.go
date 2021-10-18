@@ -2,21 +2,35 @@ package httpapi
 
 import (
 	"backend/internal/adapters/httpapi/gameapi"
+	"backend/internal/adapters/httpapi/gamesapi"
+	"backend/internal/adapters/httpapi/playersapi"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 type ServerFactory struct {
-	playerApi *gameapi.GameApi
+	playersApi *playersapi.PlayersApi
+	gamesApi   *gamesapi.GamesApi
+	gameApi    *gameapi.GameApi
 }
 
-func NewServerFactory(playerApi *gameapi.GameApi) *ServerFactory {
-	return &ServerFactory{playerApi: playerApi}
+func NewServerFactory(
+	playersApi *playersapi.PlayersApi,
+	gamesApi *gamesapi.GamesApi,
+	gameApi *gameapi.GameApi,
+) *ServerFactory {
+	return &ServerFactory{
+		playersApi: playersApi,
+		gamesApi:   gamesApi,
+		gameApi:    gameApi,
+	}
 }
 
 func (s *ServerFactory) NewServer() *http.Server {
 	router := mux.NewRouter()
-	s.playerApi.AddRoutes(router)
+	s.playersApi.AddRoutes(router)
+	s.gamesApi.AddRoutes(router)
+	s.gameApi.AddRoutes(router)
 
 	handler := http.NewServeMux()
 	handler.Handle("/", router)
