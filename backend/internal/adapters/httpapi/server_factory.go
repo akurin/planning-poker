@@ -3,19 +3,19 @@ package httpapi
 import (
 	"backend/internal/adapters/httpapi/gameapi"
 	"backend/internal/adapters/httpapi/gamesapi"
-	"backend/internal/adapters/httpapi/playersapi"
+	"backend/internal/adapters/httpapi/signupapi"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 type ServerFactory struct {
-	playersApi *playersapi.PlayersApi
+	playersApi *signupapi.SignupApi
 	gamesApi   *gamesapi.GamesApi
 	gameApi    *gameapi.GameApi
 }
 
 func NewServerFactory(
-	playersApi *playersapi.PlayersApi,
+	playersApi *signupapi.SignupApi,
 	gamesApi *gamesapi.GamesApi,
 	gameApi *gameapi.GameApi,
 ) *ServerFactory {

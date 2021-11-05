@@ -1,34 +1,29 @@
-package playersapi
+package signupapi
 
 import (
 	"backend/internal/adapters/httpapi/dtos"
 	"backend/internal/usecase/createplayerusecase"
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
-	"net/url"
-	"path"
 )
 
-type PlayersApi struct {
-	basePath            *url.URL
+type SignupApi struct {
 	createPlayerUseCase createplayerusecase.UseCase
 }
 
-func New(basePath *url.URL, createPlayerUseCase createplayerusecase.UseCase) *PlayersApi {
-	return &PlayersApi{
-		basePath:            basePath,
+func New(createPlayerUseCase createplayerusecase.UseCase) *SignupApi {
+	return &SignupApi{
 		createPlayerUseCase: createPlayerUseCase,
 	}
 }
 
-func (a *PlayersApi) AddRoutes(router *mux.Router) {
-	router.HandleFunc("/players", a.post).Methods("POST")
+func (a *SignupApi) AddRoutes(router *mux.Router) {
+	router.HandleFunc("/signup", a.post).Methods("POST")
 }
 
-func (a *PlayersApi) post(w http.ResponseWriter, r *http.Request) {
+func (a *SignupApi) post(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	var createPlayerDto dtos.CreatePlayerDto
 	err := json.Unmarshal(reqBody, &createPlayerDto)
@@ -46,10 +41,6 @@ func (a *PlayersApi) post(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-
-	location := *a.basePath
-	location.Path = path.Join(location.Path, fmt.Sprintf("/players/%s", result.Id()))
-	w.Header().Set("Location", location.String())
 
 	http.SetCookie(w, &http.Cookie{
 		Name:     "access_token",

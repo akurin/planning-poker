@@ -1,4 +1,4 @@
-package playersapi
+package signupapi
 
 import (
 	"backend/internal/domain"
@@ -9,27 +9,22 @@ import (
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"strings"
 	"testing"
 )
 
 func Test_Create_player(t *testing.T) {
 	// Arrange
-	basePath, err := url.Parse("https://mydomain")
-	require.NoError(t, err)
-
 	playerId := domain.NewFakePlayerId("some-player-id")
-	require.NoError(t, err)
 
 	createPlayerUseCase := createplayerusecase.Mock(
 		createplayerusecase.WithResult(
 			createplayerusecase.NewResult(playerId, "very-secret-token")))
 
-	sut := New(basePath, createPlayerUseCase)
+	sut := New(createPlayerUseCase)
 
 	reqBody := `{ "name": "John Doe" }`
-	req, err := http.NewRequest("POST", "/players", strings.NewReader(reqBody))
+	req, err := http.NewRequest("POST", "/signup", strings.NewReader(reqBody))
 	require.NoError(t, err)
 	rr := httptest.NewRecorder()
 
@@ -38,23 +33,18 @@ func Test_Create_player(t *testing.T) {
 
 	// Assert
 	assert.Equal(t, http.StatusCreated, rr.Code)
-	location := rr.Header().Get("Location")
-	assert.Equal(t, "https://mydomain/players/some-player-id", location)
 	assert.Equal(t, "access_token=very-secret-token; HttpOnly", rr.Header().Get("Set-Cookie"))
 }
 
 func Test_Create_player_when_use_case_fails(t *testing.T) {
 	// Arrange
-	basePath, err := url.Parse("https://mydomain")
-	require.NoError(t, err)
-
 	createPlayerUseCase := createplayerusecase.Mock(
 		createplayerusecase.WithError(errors.New("some")))
 
-	sut := New(basePath, createPlayerUseCase)
+	sut := New(createPlayerUseCase)
 
 	reqBody := `{ "name": "John Doe" }`
-	req, err := http.NewRequest("POST", "/players", strings.NewReader(reqBody))
+	req, err := http.NewRequest("POST", "/signup", strings.NewReader(reqBody))
 	require.NoError(t, err)
 	rr := httptest.NewRecorder()
 
@@ -68,15 +58,12 @@ func Test_Create_player_when_use_case_fails(t *testing.T) {
 
 func Test_Create_player_with_invalid_request_body(t *testing.T) {
 	// Arrange
-	basePath, err := url.Parse("https://mydomain")
-	require.NoError(t, err)
-
 	createPlayerUseCase := createplayerusecase.Mock()
 
-	sut := New(basePath, createPlayerUseCase)
+	sut := New(createPlayerUseCase)
 
 	reqBody := `{ "name": null }`
-	req, err := http.NewRequest("POST", "/players", strings.NewReader(reqBody))
+	req, err := http.NewRequest("POST", "/signup", strings.NewReader(reqBody))
 	require.NoError(t, err)
 	rr := httptest.NewRecorder()
 
@@ -88,7 +75,7 @@ func Test_Create_player_with_invalid_request_body(t *testing.T) {
 	assert.Equal(t, "The field name is required.\n", rr.Body.String())
 }
 
-func handleWithGamesApi(api *PlayersApi, w http.ResponseWriter, req *http.Request) {
+func handleWithGamesApi(api *SignupApi, w http.ResponseWriter, req *http.Request) {
 	router := mux.NewRouter()
 	api.AddRoutes(router)
 

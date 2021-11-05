@@ -4,7 +4,7 @@ import (
 	"backend/internal/adapters/httpapi"
 	"backend/internal/adapters/httpapi/gameapi"
 	"backend/internal/adapters/httpapi/gamesapi"
-	"backend/internal/adapters/httpapi/playersapi"
+	"backend/internal/adapters/httpapi/signupapi"
 	"backend/internal/adapters/inmemoryrepo"
 	"backend/internal/adapters/systemclock"
 	"backend/internal/domain"
@@ -43,7 +43,7 @@ func main() {
 	// Http
 	baseUrl, _ := url.Parse("http://") // todo
 
-	playersApi := playersapi.New(baseUrl, createPlayerUseCase)
+	playersApi := signupapi.New(createPlayerUseCase)
 	gamesApi := gamesapi.NewGamesApi(baseUrl, startGameUseCase)
 	gameApi := gameapi.NewGameApi(findGameUseCase)
 
