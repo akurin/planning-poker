@@ -1,6 +1,7 @@
 package signupapi
 
 import (
+	"backend/internal/adapters/httpapi/sessions"
 	"backend/internal/domain"
 	"backend/internal/usecase/createplayerusecase"
 	"errors"
@@ -13,15 +14,16 @@ import (
 	"testing"
 )
 
-func Test_Create_player(t *testing.T) {
+func Test_Sign_up(t *testing.T) {
 	// Arrange
 	playerId := domain.NewFakePlayerId("some-player-id")
 
 	createPlayerUseCase := createplayerusecase.Mock(
 		createplayerusecase.WithResult(
-			createplayerusecase.NewResult(playerId, "very-secret-token")))
+			createplayerusecase.NewResult(playerId)))
 
-	sut := New(createPlayerUseCase)
+	sessionStore := sessions.NewFakeStore()
+	sut := New(createPlayerUseCase, sessionStore)
 
 	reqBody := `{ "name": "John Doe" }`
 	req, err := http.NewRequest("POST", "/signup", strings.NewReader(reqBody))
@@ -32,8 +34,8 @@ func Test_Create_player(t *testing.T) {
 	handleWithGamesApi(sut, rr, req)
 
 	// Assert
-	assert.Equal(t, http.StatusCreated, rr.Code)
-	assert.Equal(t, "access_token=very-secret-token; HttpOnly", rr.Header().Get("Set-Cookie"))
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Regexp(t, "^session_id=", rr.Header().Get("Set-Cookie"))
 }
 
 func Test_Create_player_when_use_case_fails(t *testing.T) {
@@ -41,7 +43,8 @@ func Test_Create_player_when_use_case_fails(t *testing.T) {
 	createPlayerUseCase := createplayerusecase.Mock(
 		createplayerusecase.WithError(errors.New("some")))
 
-	sut := New(createPlayerUseCase)
+	sessionStore := sessions.NewFakeStore()
+	sut := New(createPlayerUseCase, sessionStore)
 
 	reqBody := `{ "name": "John Doe" }`
 	req, err := http.NewRequest("POST", "/signup", strings.NewReader(reqBody))
@@ -60,7 +63,8 @@ func Test_Create_player_with_invalid_request_body(t *testing.T) {
 	// Arrange
 	createPlayerUseCase := createplayerusecase.Mock()
 
-	sut := New(createPlayerUseCase)
+	sessionStore := sessions.NewFakeStore()
+	sut := New(createPlayerUseCase, sessionStore)
 
 	reqBody := `{ "name": null }`
 	req, err := http.NewRequest("POST", "/signup", strings.NewReader(reqBody))

@@ -2,6 +2,7 @@ package signupapi
 
 import (
 	"backend/internal/adapters/httpapi/dtos"
+	"backend/internal/adapters/httpapi/sessions"
 	"backend/internal/usecase/createplayerusecase"
 	"encoding/json"
 	"github.com/gorilla/mux"
@@ -11,11 +12,13 @@ import (
 
 type SignupApi struct {
 	createPlayerUseCase createplayerusecase.UseCase
+	sessionStore        sessions.SessionStore
 }
 
-func New(createPlayerUseCase createplayerusecase.UseCase) *SignupApi {
+func New(createPlayerUseCase createplayerusecase.UseCase, sessionStore sessions.SessionStore) *SignupApi {
 	return &SignupApi{
 		createPlayerUseCase: createPlayerUseCase,
+		sessionStore:        sessionStore,
 	}
 }
 
@@ -28,7 +31,8 @@ func (a *SignupApi) post(w http.ResponseWriter, r *http.Request) {
 	var createPlayerDto dtos.CreatePlayerDto
 	err := json.Unmarshal(reqBody, &createPlayerDto)
 	if err != nil {
-		// todo
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	if validationResult := createPlayerDto.Validate(); validationResult != "" {
@@ -42,11 +46,19 @@ func (a *SignupApi) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:     "access_token",
-		Value:    result.Token(),
-		HttpOnly: true,
-	})
+	session, err := a.sessionStore.Get(r)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 
-	w.WriteHeader(http.StatusCreated)
+	session.Authenticate(result.Id())
+
+	err = a.sessionStore.Save(w, r, session)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

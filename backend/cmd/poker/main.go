@@ -4,46 +4,34 @@ import (
 	"backend/internal/adapters/httpapi"
 	"backend/internal/adapters/httpapi/gameapi"
 	"backend/internal/adapters/httpapi/gamesapi"
+	"backend/internal/adapters/httpapi/sessions"
 	"backend/internal/adapters/httpapi/signupapi"
 	"backend/internal/adapters/inmemoryrepo"
-	"backend/internal/adapters/systemclock"
 	"backend/internal/domain"
 	"backend/internal/usecase/createplayerusecase"
 	"backend/internal/usecase/findgameusecase"
 	"backend/internal/usecase/startgameusecase"
-	"crypto/ecdsa"
-	"crypto/elliptic"
-	"crypto/rand"
 	"log"
 	"net/url"
-	"time"
 )
 
 func main() {
-	// Configuration
-	privateKey, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	tokenTTL := time.Hour * 24
-
-	// Clock
-	clock := systemclock.New()
-
 	// Repositories
 	playerRepository := inmemoryrepo.NewPlayerRepository()
 	gameRepository := inmemoryrepo.NewGameRepository()
 
 	// Domain
 	playerIdGenerator := domain.NewUUIDPlayerIdGenerator()
-	tokenService := domain.NewJwtTokenService(privateKey, clock, tokenTTL)
 
 	// Use cases
 	findGameUseCase := findgameusecase.New(inmemoryrepo.NewGameRepository())
-	createPlayerUseCase := createplayerusecase.New(playerIdGenerator, playerRepository, tokenService)
+	createPlayerUseCase := createplayerusecase.New(playerIdGenerator, playerRepository)
 	startGameUseCase := startgameusecase.New(gameRepository)
 
 	// Http
 	baseUrl, _ := url.Parse("http://") // todo
 
-	playersApi := signupapi.New(createPlayerUseCase)
+	playersApi := signupapi.New(createPlayerUseCase, sessions.NewFakeStore()) // todo
 	gamesApi := gamesapi.NewGamesApi(baseUrl, startGameUseCase)
 	gameApi := gameapi.NewGameApi(findGameUseCase)
 

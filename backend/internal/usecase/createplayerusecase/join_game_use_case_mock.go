@@ -14,7 +14,7 @@ func (e fakeUseCase) Execute(_ string) (Result, error) {
 
 func Mock(opts ...FakeUseCaseOption) UseCase {
 	defaultExecute := func() (Result, error) {
-		return NewResult(domain.NewFakePlayerId("some"), "some"), nil
+		return NewResult(domain.NewFakePlayerId("some")), nil
 	}
 	result := fakeUseCase{defaultExecute}
 	for _, opt := range opts {
